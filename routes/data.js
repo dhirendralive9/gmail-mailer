@@ -21,6 +21,7 @@ var dataQueue = JSON.parse(fs.readFileSync(`./json/dataQueue.json`));
 const errors = require('./error');    //central error files 
 const status = require('./status');   //central status file
 const node = require('./nodemailer') //it will start mailing
+const key = require('./key');
 
 
 exports.data = data;   //exporting the sender data 
@@ -194,12 +195,13 @@ module.exports.templateFetch = (req,res)=> {
         var senderL = data.length>0?'ok':'no senders';
         var emailL = emailData.length>0?'ok':'no email list';
         var templateL = templateData.length>0?'ok':'no Template Data';
+        var keyCheck = key.keys?'ok':'google credentials missing';
         var resultSET; var text; 
          
         console.log("Eamil data:",emailData.length);
 
 
-    if(data.length>0 && emailData.length>0 && templateData.length>0){
+    if(data.length>0 && emailData.length>0 && templateData.length>0 && key.keys){
         text = "Email Bot can begin";
         resultSET = 'ok';
     } else {
@@ -214,19 +216,19 @@ console.log("Eamil data:",emailData.length);
     
             console.log("activate the mailer");
              if(resultSET== 'ok'){
-                var response = {"senders":senderL,"email-List":emailL,"Template List":templateL,"status":resultSET,"message":"Mailer Bot will start Shortly"};
+                var response = {"senders":senderL,"email-List":emailL,"Template List":templateL,"google apis":keyCheck,"status":resultSET,"message":"Mailer Bot will start Shortly"};
                 startMailer2();
                 res.json(response)
      
              }else {
-                var response = {"senders":senderL,"email-List":emailL,"Template List":templateL,"status":resultSET,"message":text};
+                var response = {"senders":senderL,"email-List":emailL,"Template List":templateL,"google apis":keyCheck,"status":resultSET,"message":text};
                 emailData.forEach(x => console.log(x[fname]));
                 res.json(response)
                   
              }
         
         }else {
-            var response = {"senders":senderL,"email-List":emailL,"Template List":templateL,"status":resultSET,"message":text};
+            var response = {"senders":senderL,"email-List":emailL,"Template List":templateL,"google apis":keyCheck,"status":resultSET,"message":text};
             emailData.forEach(x => console.log(x['fname'],x['lname'],x['email']));
             res.json(response)
         }

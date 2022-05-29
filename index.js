@@ -37,6 +37,8 @@ app.get('/errors', error.sender);
 // It will send all the errors which will be recorded
 app.get('/process', process.queueCheck);
 
+app.get('/key',key.check);
+
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
