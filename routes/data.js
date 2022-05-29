@@ -43,7 +43,7 @@ module.exports.senderFetch = (req,res)=> {
          const dataLog = response.data;
              try {
               dataLog.forEach((x) =>{
-                if(x.user && x.password){
+                if(x.user && x.password && x.token){
                   if((x.user)){
                     senderCount++
                   
@@ -64,7 +64,7 @@ module.exports.senderFetch = (req,res)=> {
 
             
           if(senderCount>0){
-            res.json({"code":1,"message":"sender data received"});
+            res.json({"code":1,"message":"sender data received","count":senderCount});
             status.writeStatus("sender data received");
           } else {
             res.json({"code":0,"message":"sender data missing"})
@@ -284,14 +284,14 @@ console.log("Eamil data:",emailData.length);
       setTimeout(()=>{
         
         //console.log(data[xyz].sender,data[xyz].pass,data[xyz].fname,data[xyz].lname,data[xyz].email,templateData[randomTemplate()]);
-        node.main(data[xyz].sender,data[xyz].pass,data[xyz].fname,data[xyz].lname,data[xyz].email,templateData[randomTemplate()]);
+        node.main(data[xyz].sender,data[xyz].pass,data[xyz].token,data[xyz].fname,data[xyz].lname,data[xyz].email,templateData[randomTemplate()]);
         // console.log("Tempate Data:",templateData[randomTemplate()]);
         if(data[xyz+1]){
           startMailer1(data,xyz+1)
         }else {
           status.writeStatus(`All Message delivered. please check status for more information`);
         }
-      },5000)
+      },8000)
        
      } 
 
@@ -304,11 +304,12 @@ console.log("Eamil data:",emailData.length);
             for(j=min_mail;j<=max_mail;j++){
               let sender = x.user;
               let pass = x.password;
+              let token = x.token;
               let currEmail = emailData[vv]?emailData[vv]:"";
               let fname = currEmail['fname']?currEmail['fname']:"Amber";
               let lname = currEmail['lname']?currEmail['lname']:"McDermott"; 
               let email = currEmail['email']?currEmail['email']:"amber.mcdermott95@ethereal.email"; 
-              var newQueue = {"sender":sender,"pass":pass,"fname":fname,"lname":lname,"email":email};
+              var newQueue = {"sender":sender,"pass":pass,"token":token,"fname":fname,"lname":lname,"email":email};
               dataQueue.push(newQueue);
               vv++;
             } 
