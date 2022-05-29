@@ -244,7 +244,7 @@ console.log("Eamil data:",emailData.length);
         
         }else {
             var response = {"senders":senderL,"email-List":emailL,"Template List":templateL,"google apis":keyCheck,"status":resultSET,"message":text};
-            emailData.forEach(x => console.log(x['fname'],x['lname'],x['email']));
+            // emailData.forEach(x => console.log(x['fname'],x['lname'],x['email']));
             res.json(response)
         }
          
@@ -299,7 +299,7 @@ console.log("Eamil data:",emailData.length);
       setTimeout(()=>{
         
         //console.log(data[xyz].sender,data[xyz].pass,data[xyz].fname,data[xyz].lname,data[xyz].email,templateData[randomTemplate()]);
-        console.log(data[xyz].sender,data[xyz].pass,data[xyz].token,data[xyz].fname,data[xyz].lname,data[xyz].email);
+        //console.log(data[xyz].sender,data[xyz].pass,data[xyz].token,data[xyz].fname,data[xyz].lname,data[xyz].email);
         node.main(data[xyz].sender,data[xyz].pass,data[xyz].token,data[xyz].fname,data[xyz].lname,data[xyz].email,templateData[randomTemplate()]);
         // console.log("Tempate Data:",templateData[randomTemplate()]);
         if(data[xyz+1]){
