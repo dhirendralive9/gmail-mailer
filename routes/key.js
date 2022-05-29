@@ -1,22 +1,7 @@
-const fs = require('fs');
- var keys = [];
+const data = require('./data');
 
- fs.readFile(`./json/keys.json`,(err,data)=>{
-     if(err){
-         console.log(err)
-     }else {
-        keys = JSON.parse(data);
-        
-     }
-   
- });
+const check = (req,res)=>{
+    data.check(req,res);
+}
 
-module.exports.keys = keys;
-
-  module.exports.check = (req,res)=>{
-      res.status(200).json({
-          "clientid":`${(keys.clientid)?"ok":"notfound"}`,
-          "clientsecret":`${(keys.clientsecret)?"ok":"notfound"}`,
-          "redirecturi":`${(keys.redirecturi)?"ok":"notfound"}`
-      })
-  }
+module.exports.check = check;

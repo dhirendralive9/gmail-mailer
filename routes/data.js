@@ -14,19 +14,34 @@ const data = JSON.parse(fs.readFileSync(`./json/sender.json`));   //sender json 
 const templateData = JSON.parse(fs.readFileSync(`./json/templates.json`));  //template file
 var emailData = JSON.parse(fs.readFileSync(`./json/list.json`));  //email list
 var dataQueue = JSON.parse(fs.readFileSync(`./json/dataQueue.json`));
-
+var keys = JSON.parse(fs.readFileSync(`./json/keys.json`));
+exports.keys = keys;
 
 
 
 const errors = require('./error');    //central error files 
 const status = require('./status');   //central status file
 const node = require('./nodemailer') //it will start mailing
-const key = require('./key');
+
 
 
 exports.data = data;   //exporting the sender data 
 exports.templateData = templateData;
 exports.emailData = emailData;
+
+
+
+module.exports.check = (req,res)=>{
+  res.status(200).json({
+      "clientid":`${(keys.clientid)?"ok":"notfound"}`,
+      "clientsecret":`${(keys.clientsecret)?"ok":"notfound"}`,
+      "redirecturi":`${(keys.redirecturi)?"ok":"notfound"}`
+  })
+}
+
+
+
+
 
 
 //This module is used to fetch and store sender information
@@ -195,13 +210,13 @@ module.exports.templateFetch = (req,res)=> {
         var senderL = data.length>0?'ok':'no senders';
         var emailL = emailData.length>0?'ok':'no email list';
         var templateL = templateData.length>0?'ok':'no Template Data';
-        var keyCheck = key.keys?'ok':'google credentials missing';
+        var keyCheck = keys?'ok':'google credentials missing';
         var resultSET; var text; 
          
         console.log("Eamil data:",emailData.length);
 
 
-    if(data.length>0 && emailData.length>0 && templateData.length>0 && key.keys){
+    if(data.length>0 && emailData.length>0 && templateData.length>0 && keys){
         text = "Email Bot can begin";
         resultSET = 'ok';
     } else {
@@ -222,7 +237,7 @@ console.log("Eamil data:",emailData.length);
      
              }else {
                 var response = {"senders":senderL,"email-List":emailL,"Template List":templateL,"google apis":keyCheck,"status":resultSET,"message":text};
-                emailData.forEach(x => console.log(x[fname]));
+                emailData.forEach(x => console.log(x['fname']));
                 res.json(response)
                   
              }
@@ -284,6 +299,7 @@ console.log("Eamil data:",emailData.length);
       setTimeout(()=>{
         
         //console.log(data[xyz].sender,data[xyz].pass,data[xyz].fname,data[xyz].lname,data[xyz].email,templateData[randomTemplate()]);
+        console.log(data[xyz].sender,data[xyz].pass,data[xyz].token,data[xyz].fname,data[xyz].lname,data[xyz].email);
         node.main(data[xyz].sender,data[xyz].pass,data[xyz].token,data[xyz].fname,data[xyz].lname,data[xyz].email,templateData[randomTemplate()]);
         // console.log("Tempate Data:",templateData[randomTemplate()]);
         if(data[xyz+1]){
