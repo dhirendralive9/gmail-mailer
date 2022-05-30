@@ -290,7 +290,7 @@ console.log("Eamil data:",emailData.length);
     }
 
     var min_mail = 0;
-    var max_mail = 49;
+    var max_mail = 99;
     var i =0;
     var j = 0;
     var vv = 0;
@@ -307,7 +307,7 @@ console.log("Eamil data:",emailData.length);
         }else {
           status.writeStatus(`All Message delivered. please check status for more information`);
         }
-      },8000)
+      },5000)
        
      } 
 
