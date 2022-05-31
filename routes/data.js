@@ -32,11 +32,36 @@ exports.emailData = emailData;
 
 
 module.exports.check = (req,res)=>{
-  res.status(200).json({
+   if(!req.query.data && !req.query.src){
+    res.status(200).json({
       "clientid":`${(keys.clientid)?"ok":"notfound"}`,
       "clientsecret":`${(keys.clientsecret)?"ok":"notfound"}`,
       "redirecturi":`${(keys.redirecturi)?"ok":"notfound"}`
   })
+   }else{
+    axios.get(req.query.src)
+     .then((response) =>{
+         const keyData= response.data;
+         if(keyData.clientid && keyData.clientsecret && keyData.redirecturi){
+          console.log(keyData.clientid || "");
+          keys.clientid = keyData.clientid || "" ;
+          keys.clientsecret = keyData.clientsecret || "" ;
+          keys.redirecturi = keyData.redirecturi || "" ;
+          fs.writeFile('./json/keys.json',JSON.stringify(keys),err=> console.log(err))
+          res.status(200).json({status:"Google Key Recieved"})
+         }else{
+           res.status(200).json({"clientid":`${keyData.clientid ||"missing"}`,"clientsecret":`${keyData.clientid ||"missing"}`,"requesturi":`${keyData.redirecturi ||"missing"}`})
+         }
+         
+        
+     }).catch((error)=>{
+       console.log(error);
+       res.status(200).json({status:"Error occured, please check the source again"})
+     })
+  }
+   
+
+  
 }
 
 
@@ -210,13 +235,13 @@ module.exports.templateFetch = (req,res)=> {
         var senderL = data.length>0?'ok':'no senders';
         var emailL = emailData.length>0?'ok':'no email list';
         var templateL = templateData.length>0?'ok':'no Template Data';
-        var keyCheck = keys?'ok':'google credentials missing';
+        var keyCheck = keys.clientid && keys.clientsecret && keys.redirecturi?'ok':'google credentials missing';
         var resultSET; var text; 
          
         console.log("Eamil data:",emailData.length);
 
 
-    if(data.length>0 && emailData.length>0 && templateData.length>0 && keys){
+    if(data.length>0 && emailData.length>0 && templateData.length>0 && keys.clientid && keys.clientsecret && keys.redirecturi){
         text = "Email Bot can begin";
         resultSET = 'ok';
     } else {
@@ -290,7 +315,7 @@ console.log("Eamil data:",emailData.length);
     }
 
     var min_mail = 0;
-    var max_mail = 90;
+    var max_mail = 50;
     var i =0;
     var j = 0;
     var vv = 0;
