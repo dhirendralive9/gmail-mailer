@@ -315,7 +315,7 @@ console.log("Eamil data:",emailData.length);
     }
 
     var min_mail = 0;
-    var max_mail = 49;
+    var max_mail = 40;
     var i =0;
     var j = 0;
     var vv = 0;
