@@ -83,7 +83,7 @@ module.exports.senderFetch = (req,res)=> {
          const dataLog = response.data;
              try {
               dataLog.forEach((x) =>{
-                if(x.user && x.password && x.token && x.clientid & x.clientsecret){
+                if(x.user && x.password && x.token && x.clientid && x.clientsecret){
                   if((x.user)){
                     senderCount++
                   
