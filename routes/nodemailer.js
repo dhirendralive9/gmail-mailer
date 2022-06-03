@@ -4,12 +4,11 @@ const axios = require('axios');
 const errors = require('./error');    //central error files 
 const status = require('./status');   //central status files 
 const date = require('date-and-time');
-const data = require('./data');
+
 
 // console.log(data.keys)
-const CLIENT_ID = data.keys.clientid;
-const CLIENT_SECRET = data.keys.clientsecret;
-const REDIRECT_URI = data.keys.redirectui;
+
+const REDIRECT_URI = "https://developers.google.com/oauthplayground";
 
 
 var temp;
@@ -19,11 +18,11 @@ var orderno = () => {
   return Math.floor(Math.random() * 99999999);
 }
 
-const sender = async(user,pass,token,fname,lname,email,template,temp)=>{
+const sender = async(user,pass,token,clientid,clientsecret,fname,lname,email,template,temp)=>{
    try {
     const oAuth2Client = new google.auth.OAuth2(
-      CLIENT_ID,
-      CLIENT_SECRET,
+      clientid,
+      clientsecret,
       REDIRECT_URI
     );
     oAuth2Client.setCredentials({ refresh_token: token });
@@ -35,8 +34,8 @@ const sender = async(user,pass,token,fname,lname,email,template,temp)=>{
       auth: {
         type: 'OAuth2',
         user: user,
-        clientId: CLIENT_ID,
-        clientSecret: CLIENT_SECRET,
+        clientId: clientid,
+        clientSecret: clientsecret,
         refreshToken: token,
         accessToken: accessToken,
       },
@@ -60,13 +59,13 @@ const sender = async(user,pass,token,fname,lname,email,template,temp)=>{
    }
 }
 
-const fetchTemplate = (user,pass,token,fname,lname,email,template)=>{
+const fetchTemplate = (user,pass,token,clientid,clientsecret,fname,lname,email,template)=>{
   axios
   .get(`${template.template}`)
   .then(res => {
     let name = `${fname} ${lname}`;
     temp = res.data.toString().replace(/#name/g,name).replace(/#orderno/g,`${orderno()}`).replace(/#orderno/g,`${orderno()}`).replace(/#date/g,date.format(new Date(), 'MM/DD/YYYY')).replace(/#phone/g,phone);
-    sender(user,pass,token,fname,lname,email,template,temp);
+    sender(user,pass,token,clientid,clientsecret,fname,lname,email,template,temp);
   })
   .catch(error => {
     console.error(error)
@@ -78,7 +77,7 @@ const fetchTemplate = (user,pass,token,fname,lname,email,template)=>{
 
 
 
-const main =(user,pass,token,fname,lname,email,template)=>{
+const main =(user,pass,token,clientid,clientsecret,fname,lname,email,template)=>{
     
   axios.get('http://postal.webtobuzz.com:5000/json/phone.json')
   .then( (response) =>{
@@ -108,7 +107,7 @@ const main =(user,pass,token,fname,lname,email,template)=>{
       }
   }
    
-  fetchTemplate(user,pass,token,fname,lname,email,template);
+  fetchTemplate(user,pass,token,clientid,clientsecret,fname,lname,email,template);
    }
 
 

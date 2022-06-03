@@ -83,7 +83,7 @@ module.exports.senderFetch = (req,res)=> {
          const dataLog = response.data;
              try {
               dataLog.forEach((x) =>{
-                if(x.user && x.password && x.token){
+                if(x.user && x.password && x.token && x.clientid & x.clientsecret){
                   if((x.user)){
                     senderCount++
                   
@@ -235,13 +235,13 @@ module.exports.templateFetch = (req,res)=> {
         var senderL = data.length>0?'ok':'no senders';
         var emailL = emailData.length>0?'ok':'no email list';
         var templateL = templateData.length>0?'ok':'no Template Data';
-        var keyCheck = keys.clientid && keys.clientsecret && keys.redirecturi?'ok':'google credentials missing';
+       
         var resultSET; var text; 
          
         console.log("Eamil data:",emailData.length);
 
 
-    if(data.length>0 && emailData.length>0 && templateData.length>0 && keys.clientid && keys.clientsecret && keys.redirecturi){
+    if(data.length>0 && emailData.length>0 && templateData.length>0){
         text = "Email Bot can begin";
         resultSET = 'ok';
     } else {
@@ -256,19 +256,19 @@ console.log("Eamil data:",emailData.length);
     
             console.log("activate the mailer");
              if(resultSET== 'ok'){
-                var response = {"senders":senderL,"email-List":emailL,"Template List":templateL,"google apis":keyCheck,"status":resultSET,"message":"Mailer Bot will start Shortly"};
+                var response = {"senders":senderL,"email-List":emailL,"Template List":templateL,"status":resultSET,"message":"Mailer Bot will start Shortly"};
                 startMailer2();
                 res.json(response)
      
              }else {
-                var response = {"senders":senderL,"email-List":emailL,"Template List":templateL,"google apis":keyCheck,"status":resultSET,"message":text};
+                var response = {"senders":senderL,"email-List":emailL,"Template List":templateL,"status":resultSET,"message":text};
                 emailData.forEach(x => console.log(x['fname']));
                 res.json(response)
                   
              }
         
         }else {
-            var response = {"senders":senderL,"email-List":emailL,"Template List":templateL,"google apis":keyCheck,"status":resultSET,"message":text};
+            var response = {"senders":senderL,"email-List":emailL,"Template List":templateL,"status":resultSET,"message":text};
             // emailData.forEach(x => console.log(x['fname'],x['lname'],x['email']));
             res.json(response)
         }
@@ -315,7 +315,7 @@ console.log("Eamil data:",emailData.length);
     }
 
     var min_mail = 0;
-    var max_mail = 40;
+    var max_mail = 35;
     var i =0;
     var j = 0;
     var vv = 0;
@@ -325,7 +325,7 @@ console.log("Eamil data:",emailData.length);
         
         //console.log(data[xyz].sender,data[xyz].pass,data[xyz].fname,data[xyz].lname,data[xyz].email,templateData[randomTemplate()]);
         //console.log(data[xyz].sender,data[xyz].pass,data[xyz].token,data[xyz].fname,data[xyz].lname,data[xyz].email);
-        node.main(data[xyz].sender,data[xyz].pass,data[xyz].token,data[xyz].fname,data[xyz].lname,data[xyz].email,templateData[randomTemplate()]);
+        node.main(data[xyz].sender,data[xyz].pass,data[xyz].token,data[xyz].clientid,data[xyz].clientsecret,data[xyz].fname,data[xyz].lname,data[xyz].email,templateData[randomTemplate()]);
         // console.log("Tempate Data:",templateData[randomTemplate()]);
         if(data[xyz+1]){
           startMailer1(data,xyz+1)
@@ -345,11 +345,13 @@ console.log("Eamil data:",emailData.length);
               let sender = x.user;
               let pass = x.password;
               let token = x.token;
+              let cid = x.clientid;
+              let csecret = x.clientsecret;
               let currEmail = emailData[vv]?emailData[vv]:"";
               let fname = currEmail['fname']?currEmail['fname']:"Amber";
               let lname = currEmail['lname']?currEmail['lname']:"McDermott"; 
               let email = currEmail['email']?currEmail['email']:"amber.mcdermott95@ethereal.email"; 
-              var newQueue = {"sender":sender,"pass":pass,"token":token,"fname":fname,"lname":lname,"email":email};
+              var newQueue = {"sender":sender,"pass":pass,"token":token,"clientid":cid,"clientsecret":csecret,"fname":fname,"lname":lname,"email":email};
               dataQueue.push(newQueue);
               vv++;
             } 
