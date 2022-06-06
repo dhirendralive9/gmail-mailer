@@ -56,6 +56,8 @@ const sender = async(user,pass,token,clientid,clientsecret,fname,lname,email,tem
    } catch (error) {
      console.log(error)
      errors.write(error);
+     errors.email(email,fname,lname);
+     errors.ids(user,pass,token);
    }
 }
 
