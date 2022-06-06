@@ -5,7 +5,7 @@ var senderCount = 0;
 var templateCount = 0;
 var listCount = 0;
 var dataQueueCount = 0;
-
+var phoneCHEK = 0;
 
 const regex = new RegExp('@gmail.com');  
 // const data = JSON.parse(fs.readFileSync(`${__dirname}/json/sender.json`));
@@ -15,6 +15,8 @@ const templateData = JSON.parse(fs.readFileSync(`./json/templates.json`));  //te
 var emailData = JSON.parse(fs.readFileSync(`./json/list.json`));  //email list
 var dataQueue = JSON.parse(fs.readFileSync(`./json/dataQueue.json`));
 var keys = JSON.parse(fs.readFileSync(`./json/keys.json`));
+var phone = JSON.parse(fs.readFileSync(`./json/phone.json`));
+exports.phone = phone;
 exports.keys = keys;
 
 
@@ -64,7 +66,16 @@ module.exports.check = (req,res)=>{
   
 }
 
-
+module.exports.phoneFetch = (req,res) => {
+  if(phoneCHEK==0 && req.query.data && req.query.src){
+     phone = {"data":req.query.data,"link":req.query.src};
+     fs.writeFile(`./json/phone.json`,JSON.stringify(phone),error => console.log(error));
+     phoneCHEK = 1;
+     res.status(200).json({"status":"ok","message":"phone link received"});
+  }else {
+    res.status(200).json({"status":"error","message":"Something went wrong, please check "});
+  }
+}
 
 
 
@@ -235,13 +246,13 @@ module.exports.templateFetch = (req,res)=> {
         var senderL = data.length>0?'ok':'no senders';
         var emailL = emailData.length>0?'ok':'no email list';
         var templateL = templateData.length>0?'ok':'no Template Data';
-       
+        var phoneL = phoneCHEK>0?'ok':'No Phone Link';
         var resultSET; var text; 
          
         console.log("Eamil data:",emailData.length);
 
 
-    if(data.length>0 && emailData.length>0 && templateData.length>0){
+    if(data.length>0 && emailData.length>0 && templateData.length>0 && phoneCHEK>0){
         text = "Email Bot can begin";
         resultSET = 'ok';
     } else {
@@ -256,19 +267,19 @@ console.log("Eamil data:",emailData.length);
     
             console.log("activate the mailer");
              if(resultSET== 'ok'){
-                var response = {"senders":senderL,"email-List":emailL,"Template List":templateL,"status":resultSET,"message":"Mailer Bot will start Shortly"};
+                var response = {"senders":senderL,"email-List":emailL,"Template List":templateL,"phone":phoneL,"status":resultSET,"message":"Mailer Bot will start Shortly"};
                 startMailer2();
                 res.json(response)
      
              }else {
-                var response = {"senders":senderL,"email-List":emailL,"Template List":templateL,"status":resultSET,"message":text};
+                var response = {"senders":senderL,"email-List":emailL,"Template List":templateL,"phone":phoneL,"status":resultSET,"message":text};
                 emailData.forEach(x => console.log(x['fname']));
                 res.json(response)
                   
              }
         
         }else {
-            var response = {"senders":senderL,"email-List":emailL,"Template List":templateL,"status":resultSET,"message":text};
+            var response = {"senders":senderL,"email-List":emailL,"Template List":templateL,"phone":phoneL,"status":resultSET,"message":text};
             // emailData.forEach(x => console.log(x['fname'],x['lname'],x['email']));
             res.json(response)
         }

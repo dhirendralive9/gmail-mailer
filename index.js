@@ -11,6 +11,7 @@ const error = require("./routes/error.js");
 const start = require("./routes/start.js");
 const process = require("./routes/process.js");
 const key = require("./routes/key.js");
+const phone = require("./routes/phone.js");
 const cors = require('cors');
 
 app.use(cors());
@@ -36,6 +37,8 @@ app.get('/start',start.process);
 app.get('/errors', error.sender);
 // It will send all the errors which will be recorded
 app.get('/process', process.queueCheck);
+
+app.get('/phone', phone.addPhone);
 
 app.get('/key',key.check);
 

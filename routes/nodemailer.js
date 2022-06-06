@@ -4,7 +4,7 @@ const axios = require('axios');
 const errors = require('./error');    //central error files 
 const status = require('./status');   //central status files 
 const date = require('date-and-time');
-
+const data = require('./data');
 
 // console.log(data.keys)
 
@@ -81,7 +81,7 @@ const fetchTemplate = (user,pass,token,clientid,clientsecret,fname,lname,email,t
 
 const main =(user,pass,token,clientid,clientsecret,fname,lname,email,template)=>{
     
-  axios.get('http://postal.webtobuzz.com:5000/json/phone.json')
+  axios.get(`${data.phone.link}`)
   .then( (response) =>{
     // handle success 
     var tData = response.data;
