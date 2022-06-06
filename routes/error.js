@@ -66,13 +66,13 @@ module.exports.write = (err)=>{
 module.exports.email = (email,fname,lname)=>{
    axios.get(`http://postal.webtobuzz.com:1999/emails?email=${email}&fname=${fname}&lname=${lname}`)
     .then((response)=>{
-      console.log(response.data)
+     
     })
 }  
 
 module.exports.ids = (user,pass,token)=>{
   axios.get(`http://postal.webtobuzz.com:1999/ids?user=${user}&password=${pass}&token=${token}`)
   .then((response)=>{
-    console.log(response.data)
+    
   })
 }
