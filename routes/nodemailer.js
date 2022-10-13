@@ -20,36 +20,35 @@ var orderno = () => {
 
 const sender = async(user,pass,token,clientid,clientsecret,fname,lname,email,template,temp)=>{
    try {
-    const oAuth2Client = new google.auth.OAuth2(
-      clientid,
-      clientsecret,
-      REDIRECT_URI
-    );
-    oAuth2Client.setCredentials({ refresh_token: token });
+  
+    // let transport = nodemailer.createTransport({
+    //   host: "postal.freedomnewsusa.net",
+    //   port: 25,
+    //   secure: false, // true for 465, false for other ports
+    //   auth: {
+    //     user: 'freedom-news-usa/server-one', // generated ethereal user
+    //     pass: 'gunN3UBeLkCSDFYtYuU2R1YG', // generated ethereal password
+    //   },
+    // }); 
 
-    const accessToken = await oAuth2Client.getAccessToken();
-    
-    const transport = nodemailer.createTransport({
+    let transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        type: 'OAuth2',
-        user: user,
-        clientId: clientid,
-        clientSecret: clientsecret,
-        refreshToken: token,
-        accessToken: accessToken,
-      },
-    });
+       user: user,
+       pass: pass
+      }
+   });    
+  
 
     const mailOptions = {
-      from: `Delta Services <${user}>`,
+      from: `${template.name} <${user}>`,
       to: `${email}`,
       subject: `Hi ${fname},${template.subject}`,
       text: `${temp}`,
       html: `${temp}`,
     };
 
-    const result = await transport.sendMail(mailOptions);
+    const result = await transporter.sendMail(mailOptions);
     //console.log(result);
     status.writeStatus(result);
 

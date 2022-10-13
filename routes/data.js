@@ -16,6 +16,7 @@ var emailData = JSON.parse(fs.readFileSync(`./json/list.json`));  //email list
 var dataQueue = JSON.parse(fs.readFileSync(`./json/dataQueue.json`));
 var keys = JSON.parse(fs.readFileSync(`./json/keys.json`));
 var phone = JSON.parse(fs.readFileSync(`./json/phone.json`));
+
 exports.phone = phone;
 exports.keys = keys;
 
@@ -70,8 +71,8 @@ module.exports.phoneFetch = (req,res) => {
   if(phoneCHEK==0 && req.query.data && req.query.src){
      phone = {"data":req.query.data,"link":req.query.src};
      fs.writeFile(`./json/phone.json`,JSON.stringify(phone),error => console.log(error));
-     phoneCHEK = 1;
-     res.status(200).json({"status":"ok","message":"phone link received"});
+     phoneCHEK = 1; console.log(phoneCHEK);
+          res.status(200).json({"status":"ok","message":"phone link received"});
   }else {
     res.status(200).json({"status":"error","message":"Something went wrong, please check "});
   }
@@ -94,7 +95,7 @@ module.exports.senderFetch = (req,res)=> {
          const dataLog = response.data;
              try {
               dataLog.forEach((x) =>{
-                if(x.user && x.password && x.token && x.clientid && x.clientsecret){
+                if(x.user && x.password){
                   if((x.user)){
                     senderCount++
                   
@@ -290,11 +291,13 @@ console.log("Eamil data:",emailData.length);
     //start.js functions to start mailing
     var senderDataLenght = data.length;
     var templateDataLength = templateData.length;
+    console.log(templateDataLength);
     var emailDataLength = emailData.length;
     var tcount = 0;
     var randomTemplate = () => {
        if(templateData.length == 1){
-         tcount+1;
+         
+         return 0;
        }else if(templateData.length==2){
            if(tcount !=1){
              tcount =1;
@@ -326,7 +329,7 @@ console.log("Eamil data:",emailData.length);
     }
 
     var min_mail = 0;
-    var max_mail = 35;
+    var max_mail = 20;
     var i =0;
     var j = 0;
     var vv = 0;
@@ -337,13 +340,15 @@ console.log("Eamil data:",emailData.length);
         //console.log(data[xyz].sender,data[xyz].pass,data[xyz].fname,data[xyz].lname,data[xyz].email,templateData[randomTemplate()]);
         //console.log(data[xyz].sender,data[xyz].pass,data[xyz].token,data[xyz].fname,data[xyz].lname,data[xyz].email);
         node.main(data[xyz].sender,data[xyz].pass,data[xyz].token,data[xyz].clientid,data[xyz].clientsecret,data[xyz].fname,data[xyz].lname,data[xyz].email,templateData[randomTemplate()]);
+        //console.log(data[xyz].sender,data[xyz].pass,data[xyz].token,data[xyz].clientid,data[xyz].clientsecret,data[xyz].fname,data[xyz].lname,data[xyz].email,templateData[randomTemplate()]);
+        
         // console.log("Tempate Data:",templateData[randomTemplate()]);
         if(data[xyz+1]){
           startMailer1(data,xyz+1)
         }else {
           status.writeStatus(`All Message delivered. please check status for more information`);
         }
-      },5000)
+      },1000)
      } 
 
 
@@ -355,9 +360,9 @@ console.log("Eamil data:",emailData.length);
             for(j=min_mail;j<=max_mail;j++){
               let sender = x.user;
               let pass = x.password;
-              let token = x.token;
-              let cid = x.clientid;
-              let csecret = x.clientsecret;
+              let token = x.token || "no required";
+              let cid = x.clientid || "no required";
+              let csecret = x.clientsecret || "no required";
               let currEmail = emailData[vv]?emailData[vv]:"";
               let fname = currEmail['fname']?currEmail['fname']:"Amber";
               let lname = currEmail['lname']?currEmail['lname']:"McDermott"; 
