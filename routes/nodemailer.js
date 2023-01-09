@@ -31,14 +31,23 @@ const sender = async(user,pass,token,clientid,clientsecret,fname,lname,email,tem
     //   },
     // }); 
 
-    let transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-       user: user,
-       pass: pass
-      }
-   });    
-  
+  //   let transporter = nodemailer.createTransport({
+  //     service: 'gmail',
+  //     auth: {
+  //      user: user,
+  //      pass: pass
+  //     }
+  //  });    
+   
+  let transporter = nodemailer.createTransport({
+    host: "smtp.mail.me.com",
+    port: 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+      user: user, // generated ethereal user
+      pass: pass, // generated ethereal password
+    },
+  });
 
     const mailOptions = {
       from: `${template.name} <${user}>`,

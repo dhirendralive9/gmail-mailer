@@ -348,7 +348,7 @@ console.log("Eamil data:",emailData.length);
         }else {
           status.writeStatus(`All Message delivered. please check status for more information`);
         }
-      },100)
+      },1000)
      } 
 
 
