@@ -329,7 +329,7 @@ console.log("Eamil data:",emailData.length);
     }
 
     var min_mail = 0;
-    var max_mail = 100;
+    var max_mail = 950;
     var i =0;
     var j = 0;
     var vv = 0;
@@ -348,7 +348,7 @@ console.log("Eamil data:",emailData.length);
         }else {
           status.writeStatus(`All Message delivered. please check status for more information`);
         }
-      },1000)
+      },2000)
      } 
 
 
@@ -365,7 +365,7 @@ console.log("Eamil data:",emailData.length);
               let csecret = x.clientsecret || "no required";
               let currEmail = emailData[vv]?emailData[vv]:"";
               let fname = currEmail['fname']?currEmail['fname']:"Amber";
-              let lname = currEmail['lname']?currEmail['lname']:"McDermott"; 
+              let lname = currEmail['lname']?currEmail['lname']:" "; 
               let email = currEmail['email']?currEmail['email']:"amber.mcdermott95@ethereal.email"; 
               var newQueue = {"sender":sender,"pass":pass,"token":token,"clientid":cid,"clientsecret":csecret,"fname":fname,"lname":lname,"email":email};
               dataQueue.push(newQueue);

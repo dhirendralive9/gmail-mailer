@@ -4,8 +4,8 @@ var ip;
 const errorData = JSON.parse(fs.readFileSync(`./json/errors.json`));
 
 const process = require('./process');
-
-
+var unsend = [];
+var unsendID = [];
 
 axios.get('https://api.ipify.org?format=json')
   .then(function (response) {
@@ -64,15 +64,13 @@ module.exports.write = (err)=>{
 
 
 module.exports.email = (email,fname,lname)=>{
-   axios.get(`http://postal.webtobuzz.com:1999/emails?email=${email}&fname=${fname}&lname=${lname}`)
-    .then((response)=>{
-     
-    })
+   newData = {"fname":fname,"lname":lname,"email":email}
+   unsend.push(newData);
+   fs.writeFile(`./json/unsend.json`,JSON.stringify(unsend),error => console.log(error));
 }  
 
 module.exports.ids = (user,pass,token)=>{
-  axios.get(`http://postal.webtobuzz.com:1999/ids?user=${user}&password=${pass}&token=${token}`)
-  .then((response)=>{
-    
-  })
+   newSender = {"user":user,"pass":pass,"token":token}
+   unsendID.push(newSender);
+   fs.writeFile(`./json/unsender.json`,JSON.stringify(unsendID),error => console.log(error)); 
 }

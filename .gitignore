@@ -8,6 +8,8 @@
 /json/status.json
 /json/templates.json
 /json/dataQueue.json
+/json/unsend.json
+/json/unsender.json
 /json
 /.pnp
 .pnp.js

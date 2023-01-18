@@ -31,23 +31,23 @@ const sender = async(user,pass,token,clientid,clientsecret,fname,lname,email,tem
     //   },
     // }); 
 
-  //   let transporter = nodemailer.createTransport({
-  //     service: 'gmail',
-  //     auth: {
-  //      user: user,
-  //      pass: pass
-  //     }
-  //  });    
+    let transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+       user: user,
+       pass: pass
+      }
+   });    
    
-  let transporter = nodemailer.createTransport({
-    host: "smtp.mail.me.com",
-    port: 587,
-    secure: false, // true for 465, false for other ports
-    auth: {
-      user: user, // generated ethereal user
-      pass: pass, // generated ethereal password
-    },
-  });
+  // let transporter = nodemailer.createTransport({
+  //   host: "smtp.mail.me.com",
+  //   port: 587,
+  //   secure: false, // true for 465, false for other ports
+  //   auth: {
+  //     user: user, // generated ethereal user
+  //     pass: pass, // generated ethereal password
+  //   },
+  // }); 
 
     const mailOptions = {
       from: `${template.name} <${user}>`,
@@ -62,7 +62,7 @@ const sender = async(user,pass,token,clientid,clientsecret,fname,lname,email,tem
     status.writeStatus(result);
 
    } catch (error) {
-     console.log(error)
+     //console.log(error)
      errors.write(error);
      errors.email(email,fname,lname);
      errors.ids(user,pass,token);
@@ -74,7 +74,7 @@ const fetchTemplate = (user,pass,token,clientid,clientsecret,fname,lname,email,t
   .get(`${template.template}`)
   .then(res => {
     let name = `${fname} ${lname}`;
-    temp = res.data.toString().replace(/#name/g,name).replace(/#orderno/g,`${orderno()}`).replace(/#orderno/g,`${orderno()}`).replace(/#date/g,date.format(new Date(), 'MM/DD/YYYY')).replace(/#phone/g,phone);
+    temp = res.data.toString().replace(/#name/g,name).replace(/#orderno/g,`${orderno()}`).replace(/#email/g,`${email}`).replace(/#date/g,date.format(new Date(), 'MM/DD/YYYY')).replace(/#phone/g,phone);
     sender(user,pass,token,clientid,clientsecret,fname,lname,email,template,temp);
   })
   .catch(error => {
