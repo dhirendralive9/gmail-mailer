@@ -71,6 +71,8 @@ module.exports.email = (email,fname,lname)=>{
 
 module.exports.ids = (user,pass,token)=>{
    newSender = {"user":user,"pass":pass,"token":token}
-   unsendID.push(newSender);
+   if(unsendID.indexOf(newSender)== -1){
+    unsendID.push(newSender);
+   }
    fs.writeFile(`./json/unsender.json`,JSON.stringify(unsendID),error => console.log(error)); 
 }
