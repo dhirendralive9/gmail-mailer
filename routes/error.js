@@ -70,9 +70,16 @@ module.exports.email = (email,fname,lname)=>{
 }  
 
 module.exports.ids = (user,pass,token)=>{
+   var count = 0;
    newSender = {"user":user,"pass":pass,"token":token}
-   if(unsendID.indexOf(newSender)== -1){
-    unsendID.push(newSender);
-   }
-   fs.writeFile(`./json/unsender.json`,JSON.stringify(unsendID),error => console.log(error)); 
+   unsendID.forEach(x => {
+    if(x.user == newSender.user){
+      count++;
+    }
+    if (count == 0){
+      unsendID.push(newSender);
+    }
+   })
+   fs.writeFile(`./json/unsender.json`,JSON.stringify(unsendID),error => console.log(error));
+   count = 0; 
 }
